@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title id="myTitle">IM</title>
+</head>
+<style>
+body {
+  background-color: #60800a;
+}
+#myname {
+  width:120px;
+  height:30px;
+}
+.setUserName {
+  width:80px;
+  height:30px;
+}
+#msg{
+  margin:80px 300px;
+  width:450px;
+  height:200px;
+  background-color:white;
+}
+.show_send{
+  margin:0px 300px;
+}
+#text{
+ width:200px;
+ height:50px;
+}
+.send_button{
+ width:80px;
+ height:30px;
+}
+</style>
+<body>
+  <h1>swoole-websocket 及时通讯demo</h1>
+   <!--发送信息-->
+   <div id="send_msg" class="main box-shadow" style="display:none;">
+       <div id="msg"></div>
+       <div class="show_send">
+            <input type="text" id="text"><input class="send_button" value="发送数据" type="submit" onclick="send_message()">
+       </div>
+   </div>
+   <!--设置昵称-->
+   <div id="setName" class="box-shadow" style="display:block;margin:200px 150px 200px 550px;">
+       <input type="text" id="myname"/>
+       <input type="submit" class="setUserName" value="设置昵称" onclick="send_name()">
+   </div>
+</body>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+var msg = document.getElementById("msg");
+var wsServer = 'ws://39.106.22.201:9501';
+var websocket = new WebSocket(wsServer);
+websocket.onopen = function(evt){
+ // msg.innerHTML = websocket.readyState;
+  /*
+   connecting 0 
+   open 1
+   closing 2
+   closed 3
+
+  */
+  console.log('链接成功');
+}
+websocket.onmessage = function(evt){
+    msg.innerHTML += evt.data+'<br />';
+   console.log('从服务器获取到的数据:'+ evt.data);
+}
+websocket.onclose = function(evt){
+   console.log("服务器拒绝");
+}
+websocket.onerror = function(evt,e){
+   console.log('错误:'+evt.data);
+}
+function send_message(){
+   var text = document.getElementById('text').value;
+   document.getElementById('text').value = '';
+   websocket.send(text);
+}
+function send_name(){
+   var text = document.getElementById('myname').value;
+   websocket.send("#name#"+text);
+   var myTitle = document.getElementById("myTitle");
+   myTitle.innerHTML = "IM" +text;
+  alert("设置成功");
+  var setName = document.getElementById("setName");
+  setName.style.display = "none";
+  var send_msg = document.getElementById("send_msg");
+  send_msg.style.display = "block";
+}
+</script>
+</html>
