@@ -7,7 +7,7 @@
 <body>
 <img id="receiver" style='width:640px;height:480px'/>
 <script type="text/javascript" charset="utf-8">
-    var ws = new WebSocket("ws://47.101.163.29:8084");
+    var ws = new WebSocket("ws://47.101.163.29:9501");
     var image = document.getElementById('receiver');
     ws.onopen = function(){
 
@@ -16,6 +16,7 @@
     {
         image.src=data.data;
     }
+    
 </script>
 </body>
 </html>
